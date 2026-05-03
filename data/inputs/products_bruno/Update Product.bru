@@ -1,0 +1,17 @@
+meta {
+  name: Update Product
+  type: http
+  seq: 4
+}
+
+put {
+  url: https://api.example.com/products/123
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "price": 649.99
+  }
+}

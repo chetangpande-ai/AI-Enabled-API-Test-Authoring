@@ -1,0 +1,39 @@
+2026-05-03 15:23:48,254 - INFO - [main.py:17] - Test Case Generator Agent initialized.
+2026-05-03 15:23:48,255 - INFO - [main.py:29] - Building LangGraph workflow...
+2026-05-03 15:23:48,318 - INFO - [main.py:32] - Starting execution for input file: data/inputs/products_bruno/
+2026-05-03 15:23:48,326 - INFO - [parser.py:8] - Starting parse_spec_node
+2026-05-03 15:23:48,326 - INFO - [parser.py:19] - Parsing API spec from data/inputs/products_bruno/
+2026-05-03 15:23:48,327 - INFO - [parser.py:22] - Detected directory. Parsing as Bruno collection...
+2026-05-03 15:23:48,329 - INFO - [parser.py:33] - Successfully parsed 5 .bru files
+2026-05-03 15:23:48,330 - INFO - [planner.py:19] - Starting plan_scenarios_node
+2026-05-03 15:23:48,331 - INFO - [planner.py:27] - Retrieving existing test scenarios from RAG...
+2026-05-03 15:23:59,535 - DEBUG - [planner.py:31] - Retrieved Context: Scenario Title: Verify POST /users fails with 415 when Content-Type is not application/json
+Tags: negative
+Steps:
+- Action: Send a POST request to /users with payload {'name': 'John Doe', 'email': 'test@example.com'} and content-type Text/XML | Expected: System should return a 415 status code
+Scenario Title: Verify POST /users fails with 400 when additional unsupported fields are included in the payload
+Tags: negative
+Steps:
+- Action: Send a POST request to /users with payload {'name': 'John Doe', 'email': 'test@example.com', 'unsupported_field': 'unsupported value'} | Expected: System should return a 400 status code
+Scenario Title: Verify POST /users fails with 422 when name is too long
+Tags: negative
+Steps:
+- Action: Send a POST request to /users with a payload where 'name' exceeds allowed character limit. Example payload: {'name': 'a'*256, 'email': 'test@example.com'} | Expected: System should return a 422 status code
+Scenario Title: Verify POST /users creates user successfully
+Tags: positive
+Steps:
+- Action: Send a POST request to '/users' with valid name and email. | Expected: The API should return a 201 status code.
+Scenario Title: Verify POST /users creates user successfully
+Tags: positive
+Steps:
+- Action: Send a POST request to '/users' with valid name and email. | Expected: The API should return a 201 status code.
+2026-05-03 15:24:00,935 - INFO - [planner.py:43] - Invoking LLM for scenario planning...
+2026-05-03 15:24:12,175 - INFO - [planner.py:60] - Planned 20 new scenarios
+2026-05-03 15:24:12,175 - DEBUG - [planner.py:61] - Scenarios: [{'name': 'Verify GET /products returns a 200 status code and a list of products when successful', 'description': 'Ensure the GET /products endpoint returns a 200 status code with a list of products when invoked successfully.', 'type': 'positive'}, {'name': 'Verify GET /products returns an empty list when no products are available', 'description': 'Test that the response from GET /products is an empty list if there are no products in the database.', 'type': 'edge_case'}, {'name': 'Verify GET /products/{id} returns the correct product details for a valid ID', 'description': 'Check whether the GET /products/{id} endpoint correctly fetches the details of a specific product given a valid product ID.', 'type': 'positive'}, {'name': 'Verify GET /products/{id} returns 404 for a non-existent product ID', 'description': 'Test that a GET request to /products/{id} with a non-existent product ID returns a 404 status code.', 'type': 'negative'}, {'name': 'Verify DELETE /products/{id} successfully deletes a product with a valid ID', 'description': 'Ensure that the DELETE /products/{id} endpoint successfully removes a product when provided with a valid ID.', 'type': 'positive'}, {'name': 'Verify DELETE /products/{id} returns 404 when a product with the specified ID does not exist', 'description': 'Test DELETE /products/{id} to confirm that it returns a 404 status code for a non-existent product ID.', 'type': 'negative'}, {'name': 'Verify POST /products fails with 400 when required fields are missing', 'description': "Send a POST request to /products with incomplete payload (e.g., missing 'name'), and verify it returns a 400 status code.", 'type': 'negative'}, {'name': 'Verify POST /products fails with 422 when price is negative', 'description': "Ensure the POST /products endpoint returns a 422 status code if the 'price' field has a negative value.", 'type': 'negative'}, {'name': 'Verify POST /products creates a product successfully with valid inputs', 'description': 'Send a valid payload to POST /products and verify the product creation is successful with a 201 status code.', 'type': 'positive'}, {'name': 'Verify PUT /products/{id} successfully updates a product with valid data', 'description': 'Ensure that sending valid data to PUT /products/{id} updates the specified product and returns a 200 status code.', 'type': 'positive'}, {'name': 'Verify PUT /products/{id} returns 400 when attempting to update with invalid payload', 'description': 'Send an invalid payload to the PUT /products/{id} endpoint (e.g., unsupported fields or invalid data type) and validate it returns a 400 status code.', 'type': 'negative'}, {'name': 'Verify PUT /products/{id} returns 404 when trying to update a non-existent product', 'description': 'Send a PUT request to /products/{id} for a non-existent product ID and verify it returns a 404 status code.', 'type': 'negative'}, {'name': 'Verify DELETE /products handles double deletion gracefully', 'description': 'Attempt to delete the same product twice using DELETE /products/{id} and ensure a 404 status code is returned for the second deletion.', 'type': 'edge_case'}, {'name': 'Verify GET /products with invalid query parameters returns a 400 status code', 'description': 'Send a GET request to /products with invalid query parameters and verify that it returns a 400 status code.', 'type': 'negative'}, {'name': 'Verify POST /products fails with 422 when price is non-numeric', 'description': "Send a payload with a non-numeric value for 'price' in POST /products and ensure a 422 response is returned.", 'type': 'negative'}, {'name': 'Verify POST /products fails with 415 when Content-Type is not application/json', 'description': 'Send a POST request to /products with a non-JSON Content-Type (e.g., text/xml) and verify a 415 status code is returned.', 'type': 'negative'}, {'name': 'Verify GET /products/{id} returns 400 for malformed IDs', 'description': 'Send a GET request to /products/{id} with an invalid ID format (e.g., string instead of numeric) and verify it returns a 400 status code.', 'type': 'negative'}, {'name': 'Verify edge case: Create Product with a maximum valid price', 'description': 'Test creating a product with the maximum allowed price value and ensure the API handles it without errors.', 'type': 'edge_case'}, {'name': 'Verify edge case: Create Product with a minimum (but valid) positive price', 'description': 'Test creating a product with the smallest valid positive price (e.g., 0.01) and ensure the API handles it without errors.', 'type': 'edge_case'}, {'name': 'Verify edge case: Create Product with empty string for name', 'description': "Send a create product request with an empty string for the 'name' field and confirm the API response behavior.", 'type': 'edge_case'}]
+2026-05-03 15:24:12,176 - INFO - [generator.py:20] - Starting generate_test_cases_node
+2026-05-03 15:24:12,178 - INFO - [generator.py:39] - Invoking LLM to generate test cases for 20 scenarios...
+2026-05-03 15:25:06,443 - INFO - [generator.py:65] - Generated 20 detailed test cases
+2026-05-03 15:25:06,444 - INFO - [formatter.py:7] - Starting format_csv_node
+2026-05-03 15:25:06,444 - INFO - [formatter.py:17] - Formatting 20 test cases into ADO CSV format
+2026-05-03 15:25:06,445 - INFO - [formatter.py:44] - CSV generation complete
+2026-05-03 15:25:06,446 - INFO - [main.py:53] - Successfully wrote test cases to data/outputs/generated_test_cases_20260503_152348.csv

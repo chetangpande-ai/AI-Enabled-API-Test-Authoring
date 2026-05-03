@@ -1,0 +1,31 @@
+ID,Work Item Type,Title,Test Step,Step Expected,Tags
+,Test Case,Verify GET /products returns a 200 status code and a list of products when successful,Send a GET request to /products,Returns 200 status code and a list of products,positive
+,Test Case,Verify GET /products returns an empty list when no products are available,Make sure there are no products in the database,,edge_case
+,Test Case,,Send a GET request to /products,Returns 200 status code and an empty list,
+,Test Case,Verify GET /products/{id} returns the correct product details for a valid ID,Identify a valid product ID,,positive
+,Test Case,,Send a GET request to /products/{id},Returns 200 status code and the correct product details,
+,Test Case,Verify GET /products/{id} returns 404 for a non-existent product ID,Identify a non-existent product ID,,negative
+,Test Case,,Send a GET request to /products/{id},Returns status code 404,
+,Test Case,Verify DELETE /products/{id} successfully deletes a product with a valid ID,Identify a product ID that exists,,positive
+,Test Case,,Send a DELETE request to /products/{id},Returns status code 200 and the product is removed from the database,
+,Test Case,Verify DELETE /products/{id} returns 404 when a product with the specified ID does not exist,Identify a non-existent product ID,,negative
+,Test Case,,Send a DELETE request to /products/{id},Returns status code 404,
+,Test Case,Verify POST /products fails with 400 when required fields are missing,"Send a POST request to /products with the following payload: {""price"": 699.99, ""category"": ""Electronics""}",Returns status code 400,negative
+,Test Case,Verify POST /products fails with 422 when price is negative,"Send a POST request to /products with the following payload: {""name"": ""Smartphone"", ""price"": -699.99, ""category"": ""Electronics""}",Returns status code 422,negative
+,Test Case,Verify POST /products creates a product successfully with valid inputs,"Send a POST request to /products with the following payload: {""name"": ""Smartphone"", ""price"": 699.99, ""category"": ""Electronics""}",Returns status code 201 and the product is added to the database,positive
+,Test Case,Verify PUT /products/{id} successfully updates a product with valid data,Identify a valid product ID,,positive
+,Test Case,,"Send a PUT request to /products/{id} with the following payload: {""price"": 649.99}",Returns status code 200 and the product price is updated in the database,
+,Test Case,Verify PUT /products/{id} returns 400 when attempting to update with invalid payload,Identify a valid product ID,,negative
+,Test Case,,"Send a PUT request to /products/{id} with the following payload: {""discount"": 10}",Returns status code 400,
+,Test Case,Verify PUT /products/{id} returns 404 when trying to update a non-existent product,Identify a non-existent product ID,,negative
+,Test Case,,"Send a PUT request to /products/{id} with the following payload: {""price"": 649.99}",Returns status code 404,
+,Test Case,Verify DELETE /products handles double deletion gracefully,Identify a valid product ID,,edge_case
+,Test Case,,Send a DELETE request to /products/{id},,
+,Test Case,,Again send a DELETE request to /products/{id},Returns status code 404 for the second deletion,
+,Test Case,Verify GET /products with invalid query parameters returns a 400 status code,Send a GET request to /products?limit=-5,Returns status code 400,negative
+,Test Case,Verify POST /products fails with 422 when price is non-numeric,"Send a POST request to /products with the following payload: {""name"": ""Smartphone"", ""price"": ""six-hundred"", ""category"": ""Electronics""}",Returns status code 422,negative
+,Test Case,Verify POST /products fails with 415 when Content-Type is not application/json,"Send a POST request to /products with 'Content-Type: text/xml' header and the following payload: ""{\""name\"": \""Smartphone\"", \""price\"": 699.99, \""category\"": \""Electronics\""}""",Returns status code 415,negative
+,Test Case,Verify GET /products/{id} returns 400 for malformed IDs,Send a GET request to /products/string-id,Returns status code 400,negative
+,Test Case,Verify edge case: Create Product with a maximum valid price,"Send a POST request to /products with the following payload: {""name"": ""Premium Product"", ""price"": 999999999, ""category"": ""Luxury""}",Returns status code 201 and the product is added to the database,edge_case
+,Test Case,Verify edge case: Create Product with a minimum (but valid) positive price,"Send a POST request to /products with the following payload: {""name"": ""Cheapest Product"", ""price"": 0.01, ""category"": ""Cheap""}",Returns status code 201 and the product is added to the database,edge_case
+,Test Case,Verify edge case: Create Product with empty string for name,"Send a POST request to /products with the following payload: {""name"": """", ""price"": 699.99, ""category"": ""Electronics""}","Returns a non-success status code (e.g., 400 or 422)",edge_case
