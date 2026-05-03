@@ -50,9 +50,18 @@ def main():
             
     if final_state.get("final_csv"):
         write_file(args.output, final_state["final_csv"])
-        logger.info(f"Successfully wrote test cases to {args.output}")
-        print(f"Successfully wrote test cases to {args.output}")
-    else:
+        logger.info(f"Successfully wrote CSV test cases to {args.output}")
+        print(f"Successfully wrote CSV test cases to {args.output}")
+        
+    if final_state.get("java_scripts"):
+        scripts_dir = Path("data/outputs/scripts")
+        scripts_dir.mkdir(parents=True, exist_ok=True)
+        java_output_path = scripts_dir / f"ApiTests_{timestamp}.java"
+        write_file(str(java_output_path), final_state["java_scripts"])
+        logger.info(f"Successfully wrote Java test scripts to {java_output_path}")
+        print(f"Successfully wrote Java test scripts to {java_output_path}")
+        
+    if not final_state.get("final_csv") and not final_state.get("java_scripts"):
         logger.warning("No output generated.")
         print("No output generated.")
 

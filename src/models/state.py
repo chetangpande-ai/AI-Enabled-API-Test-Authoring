@@ -18,4 +18,5 @@ class AgentState(TypedDict):
     scenarios: List[Scenario]
     test_cases: List[TestCase]
     final_csv: str
+    java_scripts: str
     errors: List[str]

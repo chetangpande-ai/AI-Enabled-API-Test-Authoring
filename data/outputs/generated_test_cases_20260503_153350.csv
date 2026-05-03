@@ -1,0 +1,23 @@
+ID,Work Item Type,Title,Test Step,Step Expected,Tags
+,Test Case,Verify GET /users returns list of users successfully,Step 1: Prepare a GET request to the endpoint '/users' with no payload.,,positive
+,Test Case,,Step 2: Send the GET request to the API.,,
+,Test Case,,Step 3: Validate that the response status code is 200.,,
+,Test Case,,Step 4: Verify that the response body contains a list of users represented as an array of user objects.,The API returns a 200 status code and a response body containing a list of users.,
+,Test Case,Verify POST /users fails with 400 when name is missing,"Step 1: Prepare a POST request to the endpoint '/users' with a payload containing only the 'email' field: {""email"": ""test@example.com""}.",,negative
+,Test Case,,Step 2: Send the POST request to the API.,,
+,Test Case,,Step 3: Validate that the response status code is 400.,,
+,Test Case,,"Step 4: Check that the response body contains an appropriate error message (e.g., 'name is required').",The API returns a 400 status code and a response body indicating that the 'name' field is missing.,
+,Test Case,Verify POST /users fails with 400 when name and email are missing,Step 1: Prepare a POST request to the endpoint '/users' with an empty payload: {}.,,negative
+,Test Case,,Step 2: Send the POST request to the API.,,
+,Test Case,,Step 3: Validate that the response status code is 400.,,
+,Test Case,,"Step 4: Check that the response body contains an appropriate error message (e.g., 'name and email are required').",The API returns a 400 status code and a response body indicating that both 'name' and 'email' fields are required.,
+,Test Case,Verify POST /users fails with 400 when format of email is incorrect,"Step 1: Prepare a POST request to the endpoint '/users' with a payload containing an invalid email: {""name"": ""John Doe"", ""email"": ""invalid-email""}.",,negative
+,Test Case,,Step 2: Send the POST request to the API.,,
+,Test Case,,Step 3: Validate that the response status code is 400.,,
+,Test Case,,Step 4: Check that the response body contains an appropriate error message indicating an invalid email format.,The API returns a 400 status code and a response body indicating the invalid email format.,
+,Test Case,Verify POST /users handles case sensitivity correctly,"Step 1: Prepare a POST request to the endpoint '/users' with a payload: {""name"": ""John Doe"", ""email"": ""Test@Example.com""}.",,edge_case
+,Test Case,,Step 2: Send the first POST request to the API.,,
+,Test Case,,Step 3: Validate that the response status code is 201 (User created).,,
+,Test Case,,"Step 4: Prepare another POST request to the endpoint '/users' with the same name but an email with a different case: {""name"": ""John Doe"", ""email"": ""test@example.com""}.",,
+,Test Case,,Step 5: Send the second POST request to the API.,,
+,Test Case,,Step 6: Validate that the response status code is 201 (User created) for the second request.,"The API returns a 201 status code for both requests, treating email addresses with different cases as unique entries.",

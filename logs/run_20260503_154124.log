@@ -1,0 +1,212 @@
+2026-05-03 15:41:33,052 - INFO - [main.py:17] - Test Case Generator Agent initialized.
+2026-05-03 15:41:33,054 - INFO - [main.py:29] - Building LangGraph workflow...
+2026-05-03 15:41:33,101 - INFO - [main.py:32] - Starting execution for input file: .\data\inputs\products_bruno\
+2026-05-03 15:41:33,106 - INFO - [parser.py:8] - Starting parse_spec_node
+2026-05-03 15:41:33,106 - INFO - [parser.py:19] - Parsing API spec from .\data\inputs\products_bruno\
+2026-05-03 15:41:33,107 - INFO - [parser.py:22] - Detected directory. Parsing as Bruno collection...
+2026-05-03 15:41:33,109 - INFO - [parser.py:33] - Successfully parsed 5 .bru files
+2026-05-03 15:41:33,111 - INFO - [planner.py:19] - Starting plan_scenarios_node
+2026-05-03 15:41:33,111 - INFO - [planner.py:27] - Retrieving existing test scenarios from RAG...
+2026-05-03 15:41:44,967 - DEBUG - [planner.py:31] - Retrieved Context: Scenario Title: Verify POST /users fails with 415 when Content-Type is not application/json
+Tags: negative
+Steps:
+- Action: Send a POST request to /users with payload {'name': 'John Doe', 'email': 'test@example.com'} and content-type Text/XML | Expected: System should return a 415 status code
+Scenario Title: Verify POST /users fails with 400 when additional unsupported fields are included in the payload
+Tags: negative
+Steps:
+- Action: Send a POST request to /users with payload {'name': 'John Doe', 'email': 'test@example.com', 'unsupported_field': 'unsupported value'} | Expected: System should return a 400 status code
+Scenario Title: Verify POST /users fails with 422 when name is too long
+Tags: negative
+Steps:
+- Action: Send a POST request to /users with a payload where 'name' exceeds allowed character limit. Example payload: {'name': 'a'*256, 'email': 'test@example.com'} | Expected: System should return a 422 status code
+Scenario Title: Verify POST /users creates user successfully
+Tags: positive
+Steps:
+- Action: Send a POST request to '/users' with valid name and email. | Expected: The API should return a 201 status code.
+Scenario Title: Verify POST /users creates user successfully
+Tags: positive
+Steps:
+- Action: Send a POST request to '/users' with valid name and email. | Expected: The API should return a 201 status code.
+2026-05-03 15:41:46,257 - INFO - [planner.py:43] - Invoking LLM for scenario planning...
+2026-05-03 15:42:00,134 - ERROR - [planner.py:65] - Planner Error: Could not extract JSON from response: New Test Scenarios:
+
+Scenario: Verify product creation request with missing 'name'
+Type: Negative
+Description: When attempting to create a product with the 'name' field missing, the API should return a 400 error code. 
+
+Scenario: Verify product creation request with missing 'price'
+Type: Negative
+Description: When attempting to create a product with the 'price' field missing, the API should return a 400 error code.
+
+Scenario: Verify product creation request with missing 'category'
+Type: Negative
+Description: When attempting to create a product with the 'category' field missing, the API should return a 400 error code.
+
+Scenario: Verify product deletion request with non-existing product ID
+Type: Negative
+Description: When attempting to delete a product with a non-existing ID, the API should return a 404 error.
+
+Scenario: Verify product retrieval by ID request with non-existing product ID
+Type: Negative
+Description: When attempting to retrieve a product by a non-existing ID, the API should return a 404 error.
+
+Scenario: Verify product updates with non-existing product ID
+Type: Negative
+Description: When attempting to update a product with a non-existing ID, the API should return a 404 error.
+
+Scenario: Verify successful product creation
+Type: Positive
+Description: When attempting to create a product with all mandatory fields provided and valid, the API should return a 201 status code.
+
+Scenario: Verify successful product deletion
+Type: Positive
+Description: When attempting to delete a product with an existing ID, the API should return a 200 status code.
+
+Scenario: Verify successful product retrieval by ID
+Type: Positive
+Description: When attempting to retrieve a product by an existing ID, the API should return a 200 status code and the product's details.
+
+Scenario: Verify successful product update
+Type: Positive
+Description: When attempting to update a product with an existing ID, the API should return a 200 status code.
+
+Scenario: Verify request to Get Products
+Type: Edge Case
+Description: When requesting to get all products, regardless of the number of products, the API should return a 200 status code and the list of products. 
+
+Scenario: Verify Update Product with value below minimum allowed
+Type: Edge Case
+Description: When attempting to update a product's price to a value lower than the lowest allowed price, the API should return a 400 error code.
+
+Scenario: Verify Create Product with price value exceeding maximum allowed
+Type: Edge Case
+Description: When attempting to create a product with a price higher than the maximum allowed price, the API should return a 400 error code. 
+
+Scenario: Verify a GET request to a product just after its deletion
+Type: Edge Case
+Description: When attempting to make a GET request to a product immediately after it has been deleted, the API should return a 404 error code.
+Traceback (most recent call last):
+  File "D:\AI\Test-Authoring-Platform-030526\src\nodes\planner.py", line 54, in plan_scenarios_node
+    raise ValueError(f"Could not extract JSON from response: {content}")
+ValueError: Could not extract JSON from response: New Test Scenarios:
+
+Scenario: Verify product creation request with missing 'name'
+Type: Negative
+Description: When attempting to create a product with the 'name' field missing, the API should return a 400 error code. 
+
+Scenario: Verify product creation request with missing 'price'
+Type: Negative
+Description: When attempting to create a product with the 'price' field missing, the API should return a 400 error code.
+
+Scenario: Verify product creation request with missing 'category'
+Type: Negative
+Description: When attempting to create a product with the 'category' field missing, the API should return a 400 error code.
+
+Scenario: Verify product deletion request with non-existing product ID
+Type: Negative
+Description: When attempting to delete a product with a non-existing ID, the API should return a 404 error.
+
+Scenario: Verify product retrieval by ID request with non-existing product ID
+Type: Negative
+Description: When attempting to retrieve a product by a non-existing ID, the API should return a 404 error.
+
+Scenario: Verify product updates with non-existing product ID
+Type: Negative
+Description: When attempting to update a product with a non-existing ID, the API should return a 404 error.
+
+Scenario: Verify successful product creation
+Type: Positive
+Description: When attempting to create a product with all mandatory fields provided and valid, the API should return a 201 status code.
+
+Scenario: Verify successful product deletion
+Type: Positive
+Description: When attempting to delete a product with an existing ID, the API should return a 200 status code.
+
+Scenario: Verify successful product retrieval by ID
+Type: Positive
+Description: When attempting to retrieve a product by an existing ID, the API should return a 200 status code and the product's details.
+
+Scenario: Verify successful product update
+Type: Positive
+Description: When attempting to update a product with an existing ID, the API should return a 200 status code.
+
+Scenario: Verify request to Get Products
+Type: Edge Case
+Description: When requesting to get all products, regardless of the number of products, the API should return a 200 status code and the list of products. 
+
+Scenario: Verify Update Product with value below minimum allowed
+Type: Edge Case
+Description: When attempting to update a product's price to a value lower than the lowest allowed price, the API should return a 400 error code.
+
+Scenario: Verify Create Product with price value exceeding maximum allowed
+Type: Edge Case
+Description: When attempting to create a product with a price higher than the maximum allowed price, the API should return a 400 error code. 
+
+Scenario: Verify a GET request to a product just after its deletion
+Type: Edge Case
+Description: When attempting to make a GET request to a product immediately after it has been deleted, the API should return a 404 error code.
+2026-05-03 15:42:00,157 - INFO - [generator.py:20] - Starting generate_test_cases_node
+2026-05-03 15:42:00,157 - WARNING - [generator.py:22] - Errors found or no scenarios available, skipping generator
+2026-05-03 15:42:00,159 - INFO - [formatter.py:7] - Starting format_csv_node
+2026-05-03 15:42:00,159 - ERROR - [formatter.py:9] - Errors found in state, skipping CSV generation
+2026-05-03 15:42:00,160 - INFO - [script_generator.py:9] - Starting script_generator_node
+2026-05-03 15:42:00,161 - WARNING - [script_generator.py:11] - Errors found or no test cases available, skipping script generator
+2026-05-03 15:42:00,164 - ERROR - [main.py:46] - Errors encountered during generation:
+2026-05-03 15:42:00,165 - ERROR - [main.py:48] - - Planner Error: Could not extract JSON from response: New Test Scenarios:
+
+Scenario: Verify product creation request with missing 'name'
+Type: Negative
+Description: When attempting to create a product with the 'name' field missing, the API should return a 400 error code. 
+
+Scenario: Verify product creation request with missing 'price'
+Type: Negative
+Description: When attempting to create a product with the 'price' field missing, the API should return a 400 error code.
+
+Scenario: Verify product creation request with missing 'category'
+Type: Negative
+Description: When attempting to create a product with the 'category' field missing, the API should return a 400 error code.
+
+Scenario: Verify product deletion request with non-existing product ID
+Type: Negative
+Description: When attempting to delete a product with a non-existing ID, the API should return a 404 error.
+
+Scenario: Verify product retrieval by ID request with non-existing product ID
+Type: Negative
+Description: When attempting to retrieve a product by a non-existing ID, the API should return a 404 error.
+
+Scenario: Verify product updates with non-existing product ID
+Type: Negative
+Description: When attempting to update a product with a non-existing ID, the API should return a 404 error.
+
+Scenario: Verify successful product creation
+Type: Positive
+Description: When attempting to create a product with all mandatory fields provided and valid, the API should return a 201 status code.
+
+Scenario: Verify successful product deletion
+Type: Positive
+Description: When attempting to delete a product with an existing ID, the API should return a 200 status code.
+
+Scenario: Verify successful product retrieval by ID
+Type: Positive
+Description: When attempting to retrieve a product by an existing ID, the API should return a 200 status code and the product's details.
+
+Scenario: Verify successful product update
+Type: Positive
+Description: When attempting to update a product with an existing ID, the API should return a 200 status code.
+
+Scenario: Verify request to Get Products
+Type: Edge Case
+Description: When requesting to get all products, regardless of the number of products, the API should return a 200 status code and the list of products. 
+
+Scenario: Verify Update Product with value below minimum allowed
+Type: Edge Case
+Description: When attempting to update a product's price to a value lower than the lowest allowed price, the API should return a 400 error code.
+
+Scenario: Verify Create Product with price value exceeding maximum allowed
+Type: Edge Case
+Description: When attempting to create a product with a price higher than the maximum allowed price, the API should return a 400 error code. 
+
+Scenario: Verify a GET request to a product just after its deletion
+Type: Edge Case
+Description: When attempting to make a GET request to a product immediately after it has been deleted, the API should return a 404 error code.
+2026-05-03 15:42:00,188 - WARNING - [main.py:65] - No output generated.
