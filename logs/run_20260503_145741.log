@@ -1,0 +1,38 @@
+2026-05-03 14:57:53,142 - INFO - [main.py:15] - Test Case Generator Agent initialized.
+2026-05-03 14:57:53,143 - INFO - [main.py:23] - Building LangGraph workflow...
+2026-05-03 14:57:53,181 - INFO - [main.py:26] - Starting execution for input file: data/inputs/sample_swagger.json
+2026-05-03 14:57:53,186 - INFO - [parser.py:8] - Starting parse_spec_node
+2026-05-03 14:57:53,187 - INFO - [parser.py:19] - Parsing API spec from data/inputs/sample_swagger.json
+2026-05-03 14:57:53,187 - INFO - [parser.py:28] - Successfully parsed API spec
+2026-05-03 14:57:53,189 - INFO - [planner.py:19] - Starting plan_scenarios_node
+2026-05-03 14:57:53,189 - INFO - [planner.py:27] - Retrieving existing test scenarios from RAG...
+2026-05-03 14:58:06,666 - DEBUG - [planner.py:31] - Retrieved Context: Scenario Title: Verify POST /users creates user successfully
+Tags: positive
+Steps:
+- Action: Send a POST request to '/users' with valid name and email. | Expected: The API should return a 201 status code.
+Scenario Title: Verify POST /users fails with 400 when email is missing
+Tags: negative
+Steps:
+- Action: Send a POST request to '/users' with name but missing email. | Expected: The API should return a 400 status code.
+Scenario Title: Verify GET /users returns 200 with valid list
+Tags: positive
+Steps:
+- Action: Send a GET request to the endpoint '/users'. | Expected: The API should return a 200 status code with a list of users.
+Endpoint: GET /users
+Scenario Name: Verify GET /users returns 200 with valid list
+Type: positive
+Description: Standard positive flow to get all users
+Endpoint: POST /users
+Scenario Name: Verify POST /users fails with 400 when email is missing
+Type: negative
+Description: Negative flow missing required field
+2026-05-03 14:58:08,086 - INFO - [planner.py:43] - Invoking LLM for scenario planning...
+2026-05-03 14:58:16,772 - INFO - [planner.py:60] - Planned 12 new scenarios
+2026-05-03 14:58:16,772 - DEBUG - [planner.py:61] - Scenarios: [{'name': 'Verify POST /users fails with 400 when name is missing', 'description': "Negative flow where the 'name' field is missing in the request payload.", 'type': 'negative'}, {'name': 'Verify POST /users fails with 400 when request payload is empty', 'description': 'Negative flow where the request payload is completely empty.', 'type': 'negative'}, {'name': 'Verify POST /users fails with 400 when email is invalid', 'description': "Negative flow where the 'email' field is provided but is not in a valid email format (e.g., missing '@' symbol).", 'type': 'negative'}, {'name': 'Verify POST /users fails with 400 when additional unsupported fields are included in the payload', 'description': 'Negative flow where the request payload contains extra fields that are not part of the schema.', 'type': 'negative'}, {'name': 'Verify GET /users fails with 500 when server error occurs', 'description': 'Edge case where the server is unable to process the GET /users request and responds with a 500 error code.', 'type': 'edge_case'}, {'name': 'Verify POST /users fails with 415 when Content-Type is not application/json', 'description': 'Negative flow where the Content-Type header is missing or has an unsupported value, leading to a 415 response.', 'type': 'negative'}, {'name': 'Verify POST /users fails with 422 when email is too long', 'description': "Negative flow where the 'email' field exceeds the allowed character limit.", 'type': 'negative'}, {'name': 'Verify POST /users fails with 422 when name is too long', 'description': "Negative flow where the 'name' field exceeds the allowed character limit.", 'type': 'negative'}, {'name': 'Verify POST /users fails with 429 when the rate limit is exceeded', 'description': 'Edge case where too many requests are sent to the POST /users endpoint in a short time, triggering a 429 error response.', 'type': 'edge_case'}, {'name': 'Verify GET /users handles an empty user list and returns 200', 'description': 'Edge case where the database has no users, and the API should still return a 200 status with an empty list.', 'type': 'edge_case'}, {'name': 'Verify POST /users fails with 400 when name and email are both missing', 'description': "Negative flow where neither 'name' nor 'email' is provided in the request payload.", 'type': 'negative'}, {'name': 'Verify GET /users returns consistent response format', 'description': 'Positive flow to ensure that the response of GET /users follows the same schema in all cases, including non-empty and empty lists of users.', 'type': 'positive'}]
+2026-05-03 14:58:16,774 - INFO - [generator.py:20] - Starting generate_test_cases_node
+2026-05-03 14:58:16,776 - INFO - [generator.py:39] - Invoking LLM to generate test cases for 12 scenarios...
+2026-05-03 14:58:47,896 - INFO - [generator.py:65] - Generated 12 detailed test cases
+2026-05-03 14:58:47,897 - INFO - [formatter.py:7] - Starting format_csv_node
+2026-05-03 14:58:47,897 - INFO - [formatter.py:17] - Formatting 12 test cases into ADO CSV format
+2026-05-03 14:58:47,898 - INFO - [formatter.py:44] - CSV generation complete
+2026-05-03 14:58:47,899 - INFO - [main.py:47] - Successfully wrote test cases to data/outputs/my_test_cases.csv

@@ -1,0 +1,26 @@
+ID,Work Item Type,Title,Test Step,Step Expected,Tags
+,Test Case,Verify GET /users returns 200 with valid list,Send a GET request to the endpoint '/users'.,The API should return a 200 status code with a list of users.,positive
+,Test Case,Verify GET /users returns 401 when unauthorized,Send a GET request to the endpoint '/users' without an auth token.,The API should return a 401 status code.,negative
+,Test Case,Verify POST /users creates user successfully,"Send a POST request to '/users' with valid name and email.",The API should return a 201 status code.,positive
+,Test Case,Verify POST /users fails with 400 when email is missing,"Send a POST request to '/users' with name but missing email.",The API should return a 400 status code.,negative
+
+,Test Case,Verify POST /users fails with 400 when additional unsupported fields are included in the payload,"Send a POST request to /users with payload {'name': 'John Doe', 'email': 'test@example.com', 'unsupported_field': 'unsupported value'}",System should return a 400 status code,negative
+
+,Test Case,Verify GET /users fails with 500 when server error occurs,Send a GET request to /users endpoint,System should return a 500 status code,edge_case
+
+,Test Case,Verify POST /users fails with 415 when Content-Type is not application/json,"Send a POST request to /users with payload {'name': 'John Doe', 'email': 'test@example.com'} and content-type Text/XML",System should return a 415 status code,negative
+
+,Test Case,Verify POST /users fails with 422 when email is too long,"Send a POST request to /users with a payload where 'email' exceeds allowed character limit. Example payload: {'name': 'John Doe', 'email': 'a'*101+'@example.com'}",System should return a 422 status code,negative
+
+,Test Case,Verify POST /users fails with 422 when name is too long,"Send a POST request to /users with a payload where 'name' exceeds allowed character limit. Example payload: {'name': 'a'*256, 'email': 'test@example.com'}",System should return a 422 status code,negative
+
+,Test Case,Verify POST /users fails with 429 when the rate limit is exceeded,Send multiple POST requests to /users endpoint in a short duration of time,System should return a 429 status code,edge_case
+
+,Test Case,Verify GET /users handles an empty user list and returns 200,Ensure that there are no users in the database,,edge_case
+
+,Test Case,,Send a GET request to /users endpoint,System should return a 200 status code with an empty list,
+
+,Test Case,Verify POST /users fails with 400 when name and email are both missing,Send a POST request to /users with payload {},System should return a 400 status code,negative
+
+,Test Case,Verify GET /users returns consistent response format,Send a GET request to /users endpoint,System should return a 200 status code and the response should follow the specified schema,positive
+

@@ -1,0 +1,50 @@
+ID,Work Item Type,Title,Test Step,Step Expected,Tags
+,Test Case,Verify GET /users returns 200 status code and a list of users,Prepare GET request for /users endpoint,,positive
+,Test Case,,Send the request,,
+,Test Case,,Verify the status code is 200,,
+,Test Case,,Verify the response content type is application/json,,
+,Test Case,,Verify the response contains a list of users,"The status code is 200, and the response contains a list of users in the json format.",
+,Test Case,Verify POST /users fails with 400 when name is missing,Prepare POST request for /users endpoint with valid email but without name,,negative
+,Test Case,,Send the request,,
+,Test Case,,Verify the status code is 400,"The status code is 400, indicating an error due to missing name.",
+,Test Case,Verify POST /users fails with 400 when name is null,Prepare POST request for /users endpoint with name as null and valid email,,negative
+,Test Case,,Send the request,,
+,Test Case,,Verify the status code is 400,"The status code is 400, indicating an error due to null name.",
+,Test Case,Verify POST /users fails with 400 when email is null,Prepare POST request for /users endpoint with valid name but email as null,,negative
+,Test Case,,Send the request,,
+,Test Case,,Verify the status code is 400,"The status code is 400, indicating an error due to null email.",
+,Test Case,Verify POST /users fails with 400 when name and email fields exceed maximum allowed length,Prepare POST request for /users endpoint with 'name' and 'email' fields exceeding maximum allowed length,,negative
+,Test Case,,Send the request,,
+,Test Case,,Verify the status code is 400,"The status code is 400, indicating an error due to exceeding maximum length for name and email.",
+,Test Case,Verify POST /users fails with 400 when email format is invalid,"Prepare POST request for /users endpoint with invalid email format (e.g., 'invalid-email')",,negative
+,Test Case,,Send the request,,
+,Test Case,,Verify the status code is 400,"The status code is 400, indicating an error due to invalid email format.",
+,Test Case,Verify POST /users fails with 400 when payload is empty,Prepare POST request for /users endpoint with empty payload {},,negative
+,Test Case,,Send the request,,
+,Test Case,,Verify the status code is 400,"The status code is 400, indicating an error due to empty payload.",
+,Test Case,Verify GET /users handles an empty user list,Ensure there are no users in the system,,edge_case
+,Test Case,,Prepare GET request for /users endpoint,,
+,Test Case,,Send the request,,
+,Test Case,,Verify the status code is 200,,
+,Test Case,,Verify the response content type is application/json,,
+,Test Case,,Verify the response contains an empty list or appropriate message,"The status code is 200, and the response is either an empty list or a relevant message.",
+,Test Case,Verify POST /users fails with 400 when name contains special characters,Prepare POST request for /users endpoint with name containing special characters and valid email,,negative
+,Test Case,,Send the request,,
+,Test Case,,Verify the status code is 400,"The status code is 400, indicating an error due to name containing special characters.",
+,Test Case,Verify POST /users fails with 413 when payload size exceeds the limit,Prepare POST request for /users endpoint with payload size exceeding the limit,,negative
+,Test Case,,Send the request,,
+,Test Case,,Verify the status code is 413,"The status code is 413, indicating Payload Too Large.",
+,Test Case,Verify GET /users supports pagination (if relevant),Prepare GET request for /users endpoint with pagination parameters `?page=1&limit=10`,,positive
+,Test Case,,Send the request,,
+,Test Case,,Verify the status code is 200,,
+,Test Case,,Verify the response content type is application/json,,
+,Test Case,,Verify the response contains paginated list of users,"The status code is 200, and the response contains paginated list of users.",
+,Test Case,Verify GET /users returns an error for invalid query parameters,Prepare GET request for /users endpoint with invalid query parameters,,negative
+,Test Case,,Send the request,,
+,Test Case,,Verify the status code is 400,"The status code is 400, indicating an error due to invalid query parameters.",
+,Test Case,Verify POST /users handles email field with leading and trailing whitespaces,Prepare POST request for /users endpoint with valid name and email containing leading or trailing spaces,,edge_case
+,Test Case,,Send the request,,
+,Test Case,,Verify the API either trims the spaces and creates a user or rejects the request with a 400 status code,The API either trims the spaces and creates a user or rejects the request with a 400 status code.,
+,Test Case,Verify POST /users handles unexpected capitalized key names,Prepare POST request for /users endpoint with key names like 'Name' or 'EMAIL' instead of 'name' and 'email',,edge_case
+,Test Case,,Send the request,,
+,Test Case,,Verify the system processes input correctly or returns validation errors,The system either processes input correctly or responds with validation errors.,

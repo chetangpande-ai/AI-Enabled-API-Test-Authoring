@@ -1,0 +1,225 @@
+2026-05-03 14:55:11,501 - INFO - [main.py:15] - Test Case Generator Agent initialized.
+2026-05-03 14:55:11,503 - INFO - [main.py:23] - Building LangGraph workflow...
+2026-05-03 14:55:11,553 - INFO - [main.py:26] - Starting execution for input file: data/inputs/sample_swagger.json
+2026-05-03 14:55:11,566 - INFO - [parser.py:8] - Starting parse_spec_node
+2026-05-03 14:55:11,567 - INFO - [parser.py:19] - Parsing API spec from data/inputs/sample_swagger.json
+2026-05-03 14:55:11,567 - INFO - [parser.py:28] - Successfully parsed API spec
+2026-05-03 14:55:11,569 - INFO - [planner.py:19] - Starting plan_scenarios_node
+2026-05-03 14:55:11,570 - INFO - [planner.py:27] - Retrieving existing test scenarios from RAG...
+2026-05-03 14:55:23,467 - DEBUG - [planner.py:31] - Retrieved Context: Scenario Title: Verify POST /users creates user successfully
+Tags: positive
+Steps:
+- Action: Send a POST request to '/users' with valid name and email. | Expected: The API should return a 201 status code.
+Scenario Title: Verify POST /users fails with 400 when email is missing
+Tags: negative
+Steps:
+- Action: Send a POST request to '/users' with name but missing email. | Expected: The API should return a 400 status code.
+Scenario Title: Verify GET /users returns 200 with valid list
+Tags: positive
+Steps:
+- Action: Send a GET request to the endpoint '/users'. | Expected: The API should return a 200 status code with a list of users.
+Endpoint: GET /users
+Scenario Name: Verify GET /users returns 200 with valid list
+Type: positive
+Description: Standard positive flow to get all users
+Endpoint: POST /users
+Scenario Name: Verify POST /users fails with 400 when email is missing
+Type: negative
+Description: Negative flow missing required field
+2026-05-03 14:55:24,554 - INFO - [planner.py:43] - Invoking LLM for scenario planning...
+2026-05-03 14:55:33,641 - ERROR - [planner.py:56] - Planner Error: Invalid json output: New Test Scenarios:
+
+{
+  "scenarios": [
+    {
+      "name": "Verify POST /users fails with 400 when name is missing",
+      "description": "Negative flow missing required field",
+      "type": "negative"
+    },
+    {
+      "name": "Verify POST /users fails with 400 when name and email are missing",
+      "description": "Negative flow with both required fields missing",
+      "type": "negative"
+    },
+    {
+      "name": "Verify POST /users fails with 400 when email is invalid",
+      "description": "Negative flow with invalid email format",
+      "type": "negative"
+    },
+    {
+      "name": "Verify POST /users creates user successfully with minimum required fields",
+      "description": "Positive flow with just the required input fields",
+      "type": "positive"
+    },
+    {
+      "name": "Verify GET /users returns 204 when no users exist",
+      "description": "Edge case for GET request with no records",
+      "type": "edge_case"
+    },
+    {
+      "name": "Verify GET /users returns 200 even with large list of users",
+      "description": "Positive flow with large list of users",
+      "type": "positive"
+    },
+    {
+      "name": "Verify POST /users is idempotent",
+      "description": "Post request should have the same effect whether it is sent once or multiple times",
+      "type": "edge_case"
+    }
+  ]
+}
+For troubleshooting, visit: https://docs.langchain.com/oss/python/langchain/errors/OUTPUT_PARSING_FAILURE 
+Traceback (most recent call last):
+  File "D:\AI\Test-Authoring-Platform-030526\.venv\Lib\site-packages\langchain_core\output_parsers\json.py", line 88, in parse_result
+    return parse_json_markdown(text)
+  File "D:\AI\Test-Authoring-Platform-030526\.venv\Lib\site-packages\langchain_core\utils\json.py", line 163, in parse_json_markdown
+    return _parse_json(json_str, parser=parser)
+  File "D:\AI\Test-Authoring-Platform-030526\.venv\Lib\site-packages\langchain_core\utils\json.py", line 191, in _parse_json
+    return parser(json_str)
+  File "D:\AI\Test-Authoring-Platform-030526\.venv\Lib\site-packages\langchain_core\utils\json.py", line 136, in parse_partial_json
+    return json.loads(s, strict=strict)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\miniconda3\Lib\json\__init__.py", line 359, in loads
+    return cls(**kw).decode(s)
+           ~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\admin\AppData\Local\miniconda3\Lib\json\decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\miniconda3\Lib\json\decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\AI\Test-Authoring-Platform-030526\src\nodes\planner.py", line 44, in plan_scenarios_node
+    result = chain.invoke({
+        "api_spec": spec_str,
+        "context": context if context else "None",
+        "format_instructions": parser.get_format_instructions()
+    })
+  File "D:\AI\Test-Authoring-Platform-030526\.venv\Lib\site-packages\langchain_core\runnables\base.py", line 3201, in invoke
+    input_ = context.run(step.invoke, input_, config)
+  File "D:\AI\Test-Authoring-Platform-030526\.venv\Lib\site-packages\langchain_core\output_parsers\base.py", line 207, in invoke
+    return self._call_with_config(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        lambda inner_input: self.parse_result(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+        run_type="parser",
+        ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\AI\Test-Authoring-Platform-030526\.venv\Lib\site-packages\langchain_core\runnables\base.py", line 2104, in _call_with_config
+    context.run(
+    ~~~~~~~~~~~^
+        call_func_with_variable_args,  # type: ignore[arg-type]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    ),
+    ^
+  File "D:\AI\Test-Authoring-Platform-030526\.venv\Lib\site-packages\langchain_core\runnables\config.py", line 486, in call_func_with_variable_args
+    return func(input, **kwargs)  # type: ignore[call-arg]
+  File "D:\AI\Test-Authoring-Platform-030526\.venv\Lib\site-packages\langchain_core\output_parsers\base.py", line 208, in <lambda>
+    lambda inner_input: self.parse_result(
+                        ~~~~~~~~~~~~~~~~~^
+        [ChatGeneration(message=inner_input)]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ),
+    ^
+  File "D:\AI\Test-Authoring-Platform-030526\.venv\Lib\site-packages\langchain_core\output_parsers\pydantic.py", line 75, in parse_result
+    json_object = super().parse_result(result)
+  File "D:\AI\Test-Authoring-Platform-030526\.venv\Lib\site-packages\langchain_core\output_parsers\json.py", line 91, in parse_result
+    raise OutputParserException(msg, llm_output=text) from e
+langchain_core.exceptions.OutputParserException: Invalid json output: New Test Scenarios:
+
+{
+  "scenarios": [
+    {
+      "name": "Verify POST /users fails with 400 when name is missing",
+      "description": "Negative flow missing required field",
+      "type": "negative"
+    },
+    {
+      "name": "Verify POST /users fails with 400 when name and email are missing",
+      "description": "Negative flow with both required fields missing",
+      "type": "negative"
+    },
+    {
+      "name": "Verify POST /users fails with 400 when email is invalid",
+      "description": "Negative flow with invalid email format",
+      "type": "negative"
+    },
+    {
+      "name": "Verify POST /users creates user successfully with minimum required fields",
+      "description": "Positive flow with just the required input fields",
+      "type": "positive"
+    },
+    {
+      "name": "Verify GET /users returns 204 when no users exist",
+      "description": "Edge case for GET request with no records",
+      "type": "edge_case"
+    },
+    {
+      "name": "Verify GET /users returns 200 even with large list of users",
+      "description": "Positive flow with large list of users",
+      "type": "positive"
+    },
+    {
+      "name": "Verify POST /users is idempotent",
+      "description": "Post request should have the same effect whether it is sent once or multiple times",
+      "type": "edge_case"
+    }
+  ]
+}
+For troubleshooting, visit: https://docs.langchain.com/oss/python/langchain/errors/OUTPUT_PARSING_FAILURE 
+2026-05-03 14:55:33,785 - INFO - [generator.py:20] - Starting generate_test_cases_node
+2026-05-03 14:55:33,785 - WARNING - [generator.py:22] - Errors found or no scenarios available, skipping generator
+2026-05-03 14:55:33,787 - INFO - [formatter.py:7] - Starting format_csv_node
+2026-05-03 14:55:33,788 - ERROR - [formatter.py:9] - Errors found in state, skipping CSV generation
+2026-05-03 14:55:33,792 - ERROR - [main.py:40] - Errors encountered during generation:
+2026-05-03 14:55:33,793 - ERROR - [main.py:42] - - Planner Error: Invalid json output: New Test Scenarios:
+
+{
+  "scenarios": [
+    {
+      "name": "Verify POST /users fails with 400 when name is missing",
+      "description": "Negative flow missing required field",
+      "type": "negative"
+    },
+    {
+      "name": "Verify POST /users fails with 400 when name and email are missing",
+      "description": "Negative flow with both required fields missing",
+      "type": "negative"
+    },
+    {
+      "name": "Verify POST /users fails with 400 when email is invalid",
+      "description": "Negative flow with invalid email format",
+      "type": "negative"
+    },
+    {
+      "name": "Verify POST /users creates user successfully with minimum required fields",
+      "description": "Positive flow with just the required input fields",
+      "type": "positive"
+    },
+    {
+      "name": "Verify GET /users returns 204 when no users exist",
+      "description": "Edge case for GET request with no records",
+      "type": "edge_case"
+    },
+    {
+      "name": "Verify GET /users returns 200 even with large list of users",
+      "description": "Positive flow with large list of users",
+      "type": "positive"
+    },
+    {
+      "name": "Verify POST /users is idempotent",
+      "description": "Post request should have the same effect whether it is sent once or multiple times",
+      "type": "edge_case"
+    }
+  ]
+}
+For troubleshooting, visit: https://docs.langchain.com/oss/python/langchain/errors/OUTPUT_PARSING_FAILURE 
+2026-05-03 14:55:33,820 - WARNING - [main.py:50] - No output generated.

@@ -1,0 +1,38 @@
+2026-05-03 15:04:46,999 - INFO - [main.py:17] - Test Case Generator Agent initialized.
+2026-05-03 15:04:47,001 - INFO - [main.py:29] - Building LangGraph workflow...
+2026-05-03 15:04:47,040 - INFO - [main.py:32] - Starting execution for input file: data/inputs/sample_swagger.json
+2026-05-03 15:04:47,046 - INFO - [parser.py:8] - Starting parse_spec_node
+2026-05-03 15:04:47,048 - INFO - [parser.py:19] - Parsing API spec from data/inputs/sample_swagger.json
+2026-05-03 15:04:47,050 - INFO - [parser.py:28] - Successfully parsed API spec
+2026-05-03 15:04:47,052 - INFO - [planner.py:19] - Starting plan_scenarios_node
+2026-05-03 15:04:47,052 - INFO - [planner.py:27] - Retrieving existing test scenarios from RAG...
+2026-05-03 15:04:57,372 - DEBUG - [planner.py:31] - Retrieved Context: Scenario Title: Verify POST /users creates user successfully
+Tags: positive
+Steps:
+- Action: Send a POST request to '/users' with valid name and email. | Expected: The API should return a 201 status code.
+Scenario Title: Verify POST /users creates user successfully
+Tags: positive
+Steps:
+- Action: Send a POST request to '/users' with valid name and email. | Expected: The API should return a 201 status code.
+Scenario Title: Verify POST /users fails with 400 when additional unsupported fields are included in the payload
+Tags: negative
+Steps:
+- Action: Send a POST request to /users with payload {'name': 'John Doe', 'email': 'test@example.com', 'unsupported_field': 'unsupported value'} | Expected: System should return a 400 status code
+Scenario Title: Verify POST /users fails with 400 when email is missing
+Tags: negative
+Steps:
+- Action: Send a POST request to '/users' with name but missing email. | Expected: The API should return a 400 status code.
+Scenario Title: Verify POST /users fails with 400 when email is missing
+Tags: negative
+Steps:
+- Action: Send a POST request to '/users' with name but missing email. | Expected: The API should return a 400 status code.
+2026-05-03 15:04:58,627 - INFO - [planner.py:43] - Invoking LLM for scenario planning...
+2026-05-03 15:05:07,519 - INFO - [planner.py:60] - Planned 14 new scenarios
+2026-05-03 15:05:07,520 - DEBUG - [planner.py:61] - Scenarios: [{'name': 'Verify GET /users returns 200 status code and a list of users', 'description': 'Test the GET /users endpoint to ensure it returns a 200 status code and a list of users in the response.', 'type': 'positive'}, {'name': 'Verify POST /users fails with 400 when name is missing', 'description': "Send a POST request to '/users' with email but without the name field and check if the API returns a 400 status code due to missing required field.", 'type': 'negative'}, {'name': 'Verify POST /users fails with 400 when name is null', 'description': "Send a POST request to '/users' with a null value for the name field and check if the API returns a 400 response.", 'type': 'negative'}, {'name': 'Verify POST /users fails with 400 when email is null', 'description': "Send a POST request to '/users' with a null value for the email field and ensure the system returns a 400 status code.", 'type': 'negative'}, {'name': 'Verify POST /users fails with 400 when name and email fields exceed maximum allowed length', 'description': "Send a POST request to '/users' with the 'name' and 'email' fields having oversized values and verify the API returns a 400 response.", 'type': 'negative'}, {'name': 'Verify POST /users fails with 400 when email format is invalid', 'description': "Send a POST request to '/users' with an invalid email format (e.g., 'invalid-email') and confirm the API responds with a 400 status code.", 'type': 'negative'}, {'name': 'Verify POST /users fails with 400 when payload is empty', 'description': "Send a POST request to '/users' with an empty payload {} and confirm the API returns a 400 bad request error.", 'type': 'negative'}, {'name': 'Verify GET /users handles an empty user list', 'description': 'Test GET /users when no users are available in the system and ensure the API returns a 200 status with an empty array or appropriate message.', 'type': 'edge_case'}, {'name': 'Verify POST /users fails with 400 when name contains special characters', 'description': "Send a POST request to '/users' with a name containing special characters and verify the API returns a 400 status code indicating invalid input.", 'type': 'negative'}, {'name': 'Verify POST /users fails with 413 when payload size exceeds the limit', 'description': "Send a POST request to '/users' with a payload size exceeding the limit and verify the API responds with a 413 Payload Too Large status code.", 'type': 'negative'}, {'name': 'Verify GET /users supports pagination (if relevant)', 'description': 'Test GET /users by including pagination query parameters such as `?page=1&limit=10` and ensure it works as expected and returns paginated data.', 'type': 'positive'}, {'name': 'Verify GET /users returns an error for invalid query parameters', 'description': "Send a GET request to '/users' with invalid query parameters and ensure the API responds appropriately with a 400 status code.", 'type': 'negative'}, {'name': 'Verify POST /users handles email field with leading and trailing whitespaces', 'description': "Send a POST request to '/users' with an email field containing leading or trailing spaces and verify the API either trims the spaces or returns a 400 status code.", 'type': 'edge_case'}, {'name': 'Verify POST /users handles unexpected capitalized key names', 'description': "Send a POST request to '/users' with key names like 'Name' or 'EMAIL' instead of 'name' and 'email' respectively. Verify expected behavior (e.g., system processes input correctly or returns validation errors).", 'type': 'edge_case'}]
+2026-05-03 15:05:07,522 - INFO - [generator.py:20] - Starting generate_test_cases_node
+2026-05-03 15:05:07,523 - INFO - [generator.py:39] - Invoking LLM to generate test cases for 14 scenarios...
+2026-05-03 15:05:52,039 - INFO - [generator.py:65] - Generated 14 detailed test cases
+2026-05-03 15:05:52,040 - INFO - [formatter.py:7] - Starting format_csv_node
+2026-05-03 15:05:52,040 - INFO - [formatter.py:17] - Formatting 14 test cases into ADO CSV format
+2026-05-03 15:05:52,041 - INFO - [formatter.py:44] - CSV generation complete
+2026-05-03 15:05:52,042 - INFO - [main.py:53] - Successfully wrote test cases to data/outputs/generated_test_cases_20260503_150447.csv

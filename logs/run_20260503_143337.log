@@ -1,0 +1,34 @@
+2026-05-03 14:33:49,673 - INFO - [main.py:15] - Test Case Generator Agent initialized.
+2026-05-03 14:33:49,674 - INFO - [main.py:23] - Building LangGraph workflow...
+2026-05-03 14:33:49,733 - INFO - [main.py:26] - Starting execution for input file: sample_swagger.json
+2026-05-03 14:33:49,743 - INFO - [parser.py:8] - Starting parse_spec_node
+2026-05-03 14:33:49,744 - INFO - [parser.py:19] - Parsing API spec from sample_swagger.json
+2026-05-03 14:33:49,760 - INFO - [parser.py:28] - Successfully parsed API spec
+2026-05-03 14:33:49,761 - INFO - [planner.py:19] - Starting plan_scenarios_node
+2026-05-03 14:33:49,762 - INFO - [planner.py:27] - Retrieving existing test scenarios from RAG...
+2026-05-03 14:34:02,367 - DEBUG - [planner.py:31] - Retrieved Context: Endpoint: GET /users
+Scenario Name: Verify GET /users returns 200 with valid list
+Type: positive
+Description: Standard positive flow to get all users
+Endpoint: POST /users
+Scenario Name: Verify POST /users fails with 400 when email is missing
+Type: negative
+Description: Negative flow missing required field
+Endpoint: POST /users
+Scenario Name: Verify POST /users creates user successfully
+Type: positive
+Description: Standard positive flow to create a user with name and email
+Endpoint: GET /users
+Scenario Name: Verify GET /users returns 401 when unauthorized
+Type: negative
+Description: Negative flow when token is missing
+2026-05-03 14:34:03,884 - INFO - [planner.py:43] - Invoking LLM for scenario planning...
+2026-05-03 14:34:11,197 - INFO - [planner.py:51] - Planned 12 new scenarios
+2026-05-03 14:34:11,197 - DEBUG - [planner.py:52] - Scenarios: [{'name': 'Verify POST /users fails with 400 when name is missing', 'description': "Ensure creating a user without the required 'name' field returns a 400 status code with an appropriate error message.", 'type': 'negative'}, {'name': 'Verify POST /users fails with 400 when additional unexpected fields are included', 'description': 'Ensure creating a user with additional fields not specified in the schema returns a 400 status code.', 'type': 'negative'}, {'name': 'Verify POST /users fails with 400 when email is invalid', 'description': "Ensure that an invalid email format in the 'email' field returns a 400 status code.", 'type': 'negative'}, {'name': 'Verify GET /users returns an empty list when no users are present', 'description': 'Ensure that a call to GET /users returns an empty array when the database has no users.', 'type': 'edge_case'}, {'name': 'Verify POST /users fails with 400 for an empty request body', 'description': 'Ensure that a request with an empty body to POST /users returns a 400 status code.', 'type': 'negative'}, {'name': 'Verify POST /users fails with 400 when name is provided but is an empty string', 'description': "Ensure that providing an empty string for the 'name' field returns a 400 status code.", 'type': 'negative'}, {'name': 'Verify POST /users fails with 400 when email is provided but is an empty string', 'description': "Ensure that providing an empty string for the 'email' field returns a 400 status code.", 'type': 'negative'}, {'name': 'Verify POST /users fails with 400 when name exceeds maximum allowed length', 'description': "Ensure that a request with a 'name' value exceeding the length limit (e.g., 255 characters) returns a 400 status code.", 'type': 'negative'}, {'name': 'Verify POST /users fails with 400 when multiple required fields are missing', 'description': "Ensure that a request with both 'name' and 'email' missing returns a 400 status code.", 'type': 'negative'}, {'name': 'Verify POST /users fails with 400 for a non-JSON payload', 'description': 'Ensure that a request with a non-JSON payload (e.g., plain text or XML) to POST /users returns a 400 status code.', 'type': 'negative'}, {'name': 'Verify POST /users fails with 415 when Content-Type header is missing', 'description': "Ensure that a POST /users request without a 'Content-Type' header returns a 415 status code.", 'type': 'negative'}, {'name': 'Verify response time for GET /users is within acceptable limits', 'description': 'Ensure that the response time for calling GET /users falls under an acceptable threshold (e.g., < 2 seconds).', 'type': 'positive'}]
+2026-05-03 14:34:11,199 - INFO - [generator.py:20] - Starting generate_test_cases_node
+2026-05-03 14:34:11,200 - INFO - [generator.py:39] - Invoking LLM to generate test cases for 12 scenarios...
+2026-05-03 14:34:21,434 - INFO - [generator.py:56] - Generated 12 detailed test cases
+2026-05-03 14:34:21,435 - INFO - [formatter.py:7] - Starting format_csv_node
+2026-05-03 14:34:21,435 - INFO - [formatter.py:17] - Formatting 12 test cases into ADO CSV format
+2026-05-03 14:34:21,435 - INFO - [formatter.py:44] - CSV generation complete
+2026-05-03 14:34:21,437 - INFO - [main.py:47] - Successfully wrote test cases to generated_test_cases.csv
