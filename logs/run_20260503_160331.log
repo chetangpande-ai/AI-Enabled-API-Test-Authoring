@@ -1,0 +1,43 @@
+2026-05-03 16:03:40,251 - INFO - [main.py:17] - Test Case Generator Agent initialized.
+2026-05-03 16:03:40,253 - INFO - [main.py:29] - Building LangGraph workflow...
+2026-05-03 16:03:40,287 - INFO - [main.py:32] - Starting execution for input file: data/inputs/sample_swagger.json
+2026-05-03 16:03:40,295 - INFO - [parser.py:8] - Starting parse_spec_node
+2026-05-03 16:03:40,296 - INFO - [parser.py:19] - Parsing API spec from data/inputs/sample_swagger.json
+2026-05-03 16:03:40,297 - INFO - [parser.py:43] - Successfully parsed API spec
+2026-05-03 16:03:40,298 - INFO - [planner.py:23] - Starting plan_scenarios_node
+2026-05-03 16:03:40,299 - INFO - [planner.py:31] - Retrieving existing test scenarios using HYBRID search (semantic + lexical)...
+2026-05-03 16:03:58,687 - DEBUG - [planner.py:35] - Retrieved 9 documents via hybrid search
+2026-05-03 16:03:59,881 - INFO - [planner.py:47] - Invoking LLM for scenario planning...
+2026-05-03 16:04:09,816 - INFO - [planner.py:66] - Running deduplication check on 14 scenarios...
+2026-05-03 16:04:09,821 - INFO - [rag_enhanced.py:189] - Deduplication: 14 unique, 0 duplicates from 14
+2026-05-03 16:04:09,821 - INFO - [planner.py:78] - Planned 14 unique new scenarios (from 14 total)
+2026-05-03 16:04:09,822 - DEBUG - [planner.py:79] - Scenarios: [{'name': 'Verify GET /users fails with 404 when endpoint is incorrect', 'description': 'Send a GET request to an incorrect endpoint to verify the API returns a 404 status code.', 'type': 'negative'}, {'name': 'Verify POST /users fails with 422 when email is invalid', 'description': "Send a POST request with an invalid email such as 'invalidemail@' or 'test@.com' to ensure the API validates the email format properly.", 'type': 'negative'}, {'name': 'Verify POST /users fails with 422 when name exceeds maximum character length', 'description': "Send a POST request with the 'name' field having more characters than the maximum allowed (if there are constraints in backend validation).", 'type': 'negative'}, {'name': 'Verify POST /users fails with 422 when email exceeds maximum character length', 'description': "Send a POST request with the 'email' field having more characters than the maximum allowed (if there are constraints in backend validation).", 'type': 'negative'}, {'name': "Verify POST /users fails with 400 when 'name' has valid length but is an empty string", 'description': 'Send a POST request with the \'name\' field being an empty string, e.g., "name":"" to ensure the API does not accept it as a valid input.', 'type': 'negative'}, {'name': "Verify POST /users fails with 400 when 'email' has valid length but is an empty string", 'description': 'Send a POST request with the \'email\' field being an empty string, e.g., "email":"" to ensure the API does not accept it as a valid input.', 'type': 'negative'}, {'name': 'Verify GET /users fails with 401 when authorization header is missing', 'description': "Send a GET request to '/users' without an authorization header if authorization is required to verify that it fails with a 401.", 'type': 'negative'}, {'name': "Verify POST /users can handle special characters in 'name'", 'description': "Send a POST request with special characters in the 'name' field to ensure the API handles them correctly.", 'type': 'positive'}, {'name': 'Verify POST /users can handle valid edge-case email formats', 'description': "Send a POST request with valid edge-case email formats (e.g., 'user+tag@example.com') to ensure they are accepted as per the email standard.", 'type': 'positive'}, {'name': 'Verify GET /users handles a very large dataset', 'description': 'Insert a very large number of users in the database and send a GET request to verify that the system returns a 200 status code along with the complete list or an appropriate paginated response.', 'type': 'edge_case'}, {'name': 'Verify POST /users does not allow duplicate emails', 'description': 'Send a POST request with a duplicate email that already exists in the database to ensure the API rejects it with a specific error code (e.g., 400).', 'type': 'negative'}, {'name': 'Verify POST /users fails with 413 when payload size exceeds the maximum limit', 'description': 'Send a very large payload (exceeding allowed request size) to verify the API handles large requests gracefully and returns a 413 status code.', 'type': 'negative'}, {'name': 'Verify GET /users supports query parameters for pagination', 'description': "Send a GET request to '/users' with query parameters for pagination (e.g., page=1, limit=10) and ensure the correct subset of users is returned with a 200 status code.", 'type': 'positive'}, {'name': 'Verify GET /users with invalid query parameters fails gracefully', 'description': 'Send a GET request with invalid or nonsensical query parameters (e.g., negative page values or excessively large limits) to ensure the API responds appropriately with 400 or similar error code.', 'type': 'negative'}]
+2026-05-03 16:04:09,824 - INFO - [generator.py:20] - Starting generate_test_cases_node
+2026-05-03 16:04:09,826 - INFO - [generator.py:39] - Invoking LLM to generate test cases for 14 scenarios...
+2026-05-03 16:04:20,236 - INFO - [generator.py:65] - Generated 14 detailed test cases
+2026-05-03 16:04:20,241 - INFO - [formatter.py:7] - Starting format_csv_node
+2026-05-03 16:04:20,242 - INFO - [formatter.py:17] - Formatting 14 test cases into ADO CSV format
+2026-05-03 16:04:20,244 - INFO - [formatter.py:44] - CSV generation complete
+2026-05-03 16:04:20,246 - INFO - [script_generator.py:9] - Starting script_generator_node
+2026-05-03 16:04:20,248 - INFO - [script_generator.py:15] - Retrieving framework guidelines from RAG...
+2026-05-03 16:04:26,113 - DEBUG - [script_generator.py:19] - Retrieved Guidelines: # Java Test Automation Framework Guidelines
+
+## 1. Libraries and Tools
+- **Test Runner**: TestNG (`@Test`, `@BeforeClass`, etc.)
+- **API Client**: REST Assured (`given()`, `when()`, `then()`)
+- **Assertions**: org.testng.Assert
+- **Reporting**: ExtentReports. Use a custom `ExtentTestManager` (assume it exists) with `logInfo()`, `logPass()`, and `logFail()`.
+## 3. Reporting Steps
+- At the start of the test, log the objective: `ExtentTestManager.logInfo("Starting test: " + testObjective);`
+- After executing the API request, log the action: `ExtentTestManager.logInfo("Sent POST request to /products");`
+- Before assertions, log the expected outcome: `ExtentTestManager.logInfo("Verifying status code is 200");`
+- If successful, log pass: `ExtentTestManager.logPass("Test passed successfully");`
+## 2. Modularity and Structure
+- Each major endpoint should have its own separate Test class (e.g., `ProductsTest.java`).
+- Extract the Base URI into a `@BeforeClass` setup block.
+- Keep tests modular: one `@Test` method per test case. Do not mix multiple scenarios into one test method.
+- Clearly separate the Arrange, Act, and Assert phases.
+2026-05-03 16:04:26,114 - INFO - [script_generator.py:33] - Invoking LLM to generate Java TestNG scripts...
+2026-05-03 16:04:36,591 - INFO - [script_generator.py:50] - Successfully generated Java scripts
+2026-05-03 16:04:36,598 - INFO - [main.py:53] - Successfully wrote CSV test cases to data/outputs/generated_test_cases_20260503_160340.csv
+2026-05-03 16:04:36,603 - INFO - [main.py:61] - Successfully wrote Java test scripts to data\outputs\scripts\ApiTests_20260503_160340.java

@@ -1,0 +1,29 @@
+ID,Work Item Type,Title,Test Step,Step Expected,Tags
+,Test Case,Verify GET /users fails with 404 when endpoint is incorrect,Send a GET request to the endpoint '/user' (misspelled version of '/users').,The API responds with a 404 status code and a meaningful error message indicating the endpoint was not found.,negative
+,Test Case,Verify POST /users fails with 422 when email is invalid,Send a POST request to the '/users' endpoint with the following payload:,,negative
+,Test Case,,"{ ""name"": ""John Doe"", ""email"": ""invalidemail@"" }",,
+,Test Case,,"Repeat with payload: { ""name"": ""Jane Doe"", ""email"": ""test@.com"" }",The API responds with a 422 status code and an error message indicating that the email format is invalid.,
+,Test Case,Verify POST /users fails with 422 when name exceeds maximum character length,Send a POST request to the '/users' endpoint with the following payload:,,negative
+,Test Case,,"{ ""name"": ""ThisNameIsWayTooLongAndExceedsTheMaximumAllowedCharacterLimitDefinedByApi"", ""email"": ""test@example.com"" }",The API responds with a 422 status code and an error message indicating that the 'name' exceeds the maximum allowed character limit.,
+,Test Case,Verify POST /users fails with 422 when email exceeds maximum character length,Send a POST request to the '/users' endpoint with the following payload:,,negative
+,Test Case,,"{ ""name"": ""John Doe"", ""email"": ""averylongemailaddresswhichexceedsthemaximumcharacterlimit@example.com"" }",The API responds with a 422 status code and an error message indicating that the 'email' exceeds the maximum allowed character limit.,
+,Test Case,Verify POST /users fails with 400 when 'name' has valid length but is an empty string,Send a POST request to the '/users' endpoint with the following payload:,,negative
+,Test Case,,"{ ""name"": """", ""email"": ""test@example.com"" }",The API responds with a 400 status code and an error message indicating the 'name' field cannot be empty.,
+,Test Case,Verify POST /users fails with 400 when 'email' has valid length but is an empty string,Send a POST request to the '/users' endpoint with the following payload:,,negative
+,Test Case,,"{ ""name"": ""John Doe"", ""email"": """" }",The API responds with a 400 status code and an error message indicating the 'email' field cannot be empty.,
+,Test Case,Verify GET /users fails with 401 when authorization header is missing,Send a GET request to the '/users' endpoint without an 'Authorization' header supplied.,The API responds with a 401 status code and an error message indicating that the request is unauthorized.,negative
+,Test Case,Verify POST /users can handle special characters in 'name',Send a POST request to the '/users' endpoint with the following payload:,,positive
+,Test Case,,"{ ""name"": ""Ana María & López"", ""email"": ""ana@example.com"" }",The API responds with a 201 status code and the user is created successfully.,
+,Test Case,Verify POST /users can handle valid edge-case email formats,Send a POST request to the '/users' endpoint with the following payload:,,positive
+,Test Case,,"{ ""name"": ""John Doe"", ""email"": ""user+tag@example.com"" }",The API responds with a 201 status code and the user is created successfully.,
+,Test Case,Verify GET /users handles a very large dataset,"Inject a very large dataset (e.g., 1 million users) into the users database.",,edge_case
+,Test Case,,Send a GET request to the '/users' endpoint.,,
+,Test Case,,"If applicable, send a series of requests with pagination (e.g., '/users?page=1&limit=100').",The API responds with a 200 status code and returns the complete list of users as per pagination or all users if no pagination is applied.,
+,Test Case,Verify POST /users does not allow duplicate emails,Send a POST request to the '/users' endpoint with the following payload:,,negative
+,Test Case,,"{ ""name"": ""John Doe"", ""email"": ""unique@example.com"" }",,
+,Test Case,,Send another POST request to the '/users' endpoint with the same payload.,The API responds with a 400 status code and an error message indicating that the email already exists.,
+,Test Case,Verify POST /users fails with 413 when payload size exceeds the maximum limit,"Craft a very large payload (e.g., a 'name' or 'email' exceeding the maximum allowed payload size).",,negative
+,Test Case,,Send a POST request to the '/users' endpoint with the large payload.,The API responds with a 413 status code and an error message indicating the payload size exceeds the maximum limit.,
+,Test Case,Verify GET /users supports query parameters for pagination,Send a GET request to the '/users?page=1&limit=10' endpoint.,"The API responds with a 200 status code and returns the first 10 users, along with pagination metadata if applicable.",positive
+,Test Case,Verify GET /users with invalid query parameters fails gracefully,Send a GET request to the endpoint '/users?page=-1&limit=10'.,,negative
+,Test Case,,Send a GET request to the endpoint '/users?page=1&limit=1000000'.,"The API responds with a 400 status code or similar, along with an error message indicating invalid query parameter values.",
